@@ -24,7 +24,7 @@ public class VendingMachineAdapter extends ExecutionContext {
 
     @BeforeExecution
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().browserVersion("99").setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
