@@ -67,6 +67,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge addTumThai");
         // Click add tum thai
         // Your code here ...
+        driver.findElement(By.id("add_tum_thai")).click();
     }
 
     @Edge()
@@ -74,6 +75,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge addTumPoo");
         // Click add tum poo
         // Your code here ...
+        driver.findElement(By.id("add_tum_poo")).click();
     }
 
     @Vertex()
