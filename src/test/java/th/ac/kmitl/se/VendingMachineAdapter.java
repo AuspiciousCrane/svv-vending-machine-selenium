@@ -3,6 +3,7 @@ package th.ac.kmitl.se;
 import java.time.Duration;
 import java.util.List;
 
+import org.graalvm.polyglot.Value;
 import org.graphwalker.core.machine.ExecutionContext;
 import org.graphwalker.java.annotation.*;
 
@@ -55,10 +56,21 @@ public class VendingMachineAdapter extends ExecutionContext {
         // Wait for the check-out button to be clickable.
         // Your code here ...
 
+        if (getAttribute("numTumThai").asInt() > 0 || getAttribute("numTumPoo").asInt() > 0) {
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
+        }
+
         // Check that the number of orders is as expected.
         int numTumThaiExpected = getAttribute("numTumThai").asInt();
         int numTumPooExpected = getAttribute("numTumPoo").asInt();
         // Your code here ...
+        int realTumThaiNo = Integer.parseInt(driver.findElement(By.id("txt_tum_thai")).getAttribute("value"));
+        int realTumPooNo = Integer.parseInt(driver.findElement(By.id("txt_tum_poo")).getAttribute("value"));
+
+
+        assertEquals(numTumThaiExpected, realTumThaiNo);
+        assertEquals(numTumPooExpected, realTumPooNo);
 
     }
 
@@ -68,6 +80,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         // Click add tum thai
         // Your code here ...
         driver.findElement(By.id("add_tum_thai")).click();
+        setAttribute("numTumThai", Value.asValue(getAttribute("numTumThai").asInt() + 1));
     }
 
     @Edge()
@@ -76,6 +89,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         // Click add tum poo
         // Your code here ...
         driver.findElement(By.id("add_tum_poo")).click();
+        setAttribute("numTumPoo", Value.asValue(getAttribute("numTumPoo").asInt() + 1));
     }
 
     @Vertex()
@@ -83,6 +97,8 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Vertex ERROR_ORDERING");
         // Wait for the alert dialog to be visible.
         // Your code here ...
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.alertIsPresent());
     }
 
     @Edge()
@@ -90,6 +106,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge ack");
         // Click OK on the alert dialog
         // Your code here ...
+        driver.switchTo().alert().accept();
     }
 
     @Edge()
@@ -97,6 +114,10 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge cancel");
         // Click cancel button
         // Your code here ...
+        driver.findElement(By.id("btn_cancel")).click();
+
+        setAttribute("numTumThai", Value.asValue(0));
+        setAttribute("numTumPoo", Value.asValue(0));
     }
 
     @Edge()
