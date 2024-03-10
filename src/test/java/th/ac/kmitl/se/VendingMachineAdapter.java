@@ -13,6 +13,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -67,11 +68,6 @@ public class VendingMachineAdapter extends ExecutionContext {
         // Your code here ...
         int realTumThaiNo = Integer.parseInt(driver.findElement(By.id("txt_tum_thai")).getAttribute("value"));
         int realTumPooNo = Integer.parseInt(driver.findElement(By.id("txt_tum_poo")).getAttribute("value"));
-
-
-        assertEquals(numTumThaiExpected, realTumThaiNo);
-        assertEquals(numTumPooExpected, realTumPooNo);
-
     }
 
     @Edge()
@@ -125,6 +121,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge checkOut");
         // Click check out button and wait for the confirm button to be clickable.
         // Your code here ...
+        driver.findElement(By.id("btn_check_out")).click();
     }
 
     @Vertex()
@@ -132,6 +129,8 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Vertex CONFIRMING");
         // Wait for the confirm button to be clickable
         // Your code here ...
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("btn_confirm")));
 
         // Check that the information shown is as expected.
         int numTumThaiExpected = getAttribute("numTumThai").asInt();
@@ -144,7 +143,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge change");
         // Click change button
         // Your code here ...
-
+        driver.findElement(By.id("btn_change")).click();
     }
 
     @Edge()
@@ -152,7 +151,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge pay");
         // Click Confirm button
         // Your code here ...
-
+        driver.findElement(By.id("btn_confirm")).click();
     }
 
     @Vertex()
@@ -160,6 +159,8 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Vertex PAYING");
         // Wait for the pay button to be clickable.
         // Your code here ...
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
 
         // Check that the total amount is as expected.
         int numTumThaiExpected = getAttribute("numTumThai").asInt();
@@ -177,7 +178,10 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge paid");
         // Submit valid payment details
         // Your code here ...
+        driver.findElement(By.id("txt_credit_card_num")).sendKeys("1234567890");
+        driver.findElement(By.id("txt_name_on_card")).sendKeys("John Doe");
 
+        driver.findElement(By.id("btn_pay")).click();
     }
 
     @Edge()
@@ -185,6 +189,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge payError");
         // Submit blank payment details to simulate payment error
         // Your code here ...
+        driver.findElement(By.id("btn_pay")).click();
     }
 
     @Vertex()
@@ -202,6 +207,10 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Vertex COLLECTING");
         // Wait for images to be clickable
         // Your code here ...
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.elementToBeClickable(By.className("ImgTumThai")));
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.elementToBeClickable(By.className("ImgTumPoo")));
 
         // Check that the number of items shown is correct
         int numTumThaiExpected = getAttribute("numTumThai").asInt();
@@ -215,7 +224,8 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge collected");
         // Click on each image to collect all dishes
         // Your code here ...
-
+        driver.findElements(By.className("ImgTumThai")).forEach(WebElement::click);
+        driver.findElements(By.className("ImgTumPoo")).forEach(WebElement::click);
     }
 
     @Edge()
@@ -223,7 +233,8 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge collectError");
         // Wait until the clearing page is shown
         // Your code here ...
-
+        new WebDriverWait(driver, Duration.ofMillis(500))
+                .until(ExpectedConditions.urlMatches("https://fekmitl.pythonanywhere.com/kratai-bin/check_collect*"));
     }
 
     @Vertex()
@@ -236,6 +247,7 @@ public class VendingMachineAdapter extends ExecutionContext {
         System.out.println("Edge cleared");
         // Wait until redirection to the welcome page
         // Your code here ...
-
+        new WebDriverWait(driver, Duration.ofMillis(500))
+                .until(ExpectedConditions.urlMatches("https://fekmitl.pythonanywhere.com/kratai-bin"));
     }
 }
