@@ -35,6 +35,8 @@ public class SystemTest {
 
     @Test
     public void startOK() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(By.id("start")));
         driver.findElement(By.id("start")).click();
@@ -44,6 +46,8 @@ public class SystemTest {
 
     @Test
     public void test7UserCheckOrderCheckOutPayCollectSuccess() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
         // Click Start
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(By.id("start")));
@@ -120,6 +124,8 @@ public class SystemTest {
 
     @Test
     public void test9UserAddsInvalidNumberOfTumThai() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
         // Click Start
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(By.id("start")));
@@ -149,6 +155,8 @@ public class SystemTest {
 
     @Test
     public void test10UserAddsInvalidNumberOfTumPoo() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
         // Click Start
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(By.id("start")));
@@ -178,6 +186,8 @@ public class SystemTest {
 
     @Test
     public void test11UserNotCollectingGoodOnTime() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
         // Click Start
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(By.id("start")));
