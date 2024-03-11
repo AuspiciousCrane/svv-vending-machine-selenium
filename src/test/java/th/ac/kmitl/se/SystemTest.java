@@ -175,4 +175,56 @@ public class SystemTest {
         String tumThaiVal = driver.findElement(By.id("txt_tum_poo")).getAttribute("value");
         assertEquals("3", tumThaiVal);
     }
+
+    @Test
+    public void test11UserNotCollectingGoodOnTime() {
+        // Click Start
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+        driver.findElement(By.id("start")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+        // Click Add Tum Thai
+        driver.findElement(By.id("add_tum_thai")).click();
+
+        String tumThaiVal = driver.findElement(By.id("txt_tum_thai")).getAttribute("value");
+        assertEquals("1", tumThaiVal);
+
+        // Click Add Tum Poo
+        driver.findElement(By.id("add_tum_poo")).click();
+
+        String tumPooVal = driver.findElement(By.id("txt_tum_poo")).getAttribute("value");
+        assertEquals("1", tumPooVal);
+
+        // Click Check Out
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
+        driver.findElement(By.id("btn_check_out")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=1&btn_check_out=Check+out", driver.getCurrentUrl());
+
+        // Click Confirm Button
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("btn_confirm")));
+        driver.findElement(By.id("btn_confirm")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/pay?btn_confirm=Confirm", driver.getCurrentUrl());
+
+        // Fill In Valid Information
+        driver.findElement(By.name("txt_credit_card_num")).sendKeys("1234567890");
+        driver.findElement(By.name("txt_name_on_card")).sendKeys("John Doe");
+
+        // Click Pay
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
+        driver.findElement(By.id("btn_pay")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/check_payment?txt_credit_card_num=1234567890&txt_name_on_card=John+Doe&btn_pay=Pay", driver.getCurrentUrl());
+
+        // Wait For Time to Run Out
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.urlToBe("https://fekmitl.pythonanywhere.com/kratai-bin/check_collect?numTumThaiRemain=1&numTumPooRemain=1"));
+
+    }
 }
