@@ -146,4 +146,33 @@ public class SystemTest {
         String tumThaiVal = driver.findElement(By.id("txt_tum_thai")).getAttribute("value");
         assertEquals("3", tumThaiVal);
     }
+
+    @Test
+    public void test10UserAddsInvalidNumberOfTumPoo() {
+        // Click Start
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+        driver.findElement(By.id("start")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+        // Click Add Tum Thai 4 Times
+        for (int i = 0; i < 4; i++) {
+            driver.findElement(By.id("add_tum_poo")).click();
+        }
+
+        // Check for Alert
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.alertIsPresent());
+
+        // Click OK on Alert
+        driver.switchTo().alert().accept();
+
+        // Check Current Page
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+        // Check Number of Tum Thai
+        String tumThaiVal = driver.findElement(By.id("txt_tum_poo")).getAttribute("value");
+        assertEquals("3", tumThaiVal);
+    }
 }
