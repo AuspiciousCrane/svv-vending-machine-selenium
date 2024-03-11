@@ -14,6 +14,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 public class SystemTest {
     static WebDriver driver;
     
@@ -32,7 +34,11 @@ public class SystemTest {
     }
 
     @Test
-    public void test1() {
-        System.out.println("Test 1");
+    public void startOK() {
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+        driver.findElement(By.id("start")).click();
+
+        assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
     }
 }
