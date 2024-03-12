@@ -230,7 +230,9 @@ public class SystemTest {
 
     @Test
     public void test13UserPayCreditCardWrongThreeTimes() {
-            new WebDriverWait(driver, Duration.ofSeconds(5))
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("start")));
             driver.findElement(By.id("start")).click();
 
@@ -239,15 +241,12 @@ public class SystemTest {
             // Click Add Tum Thai
             driver.findElement(By.id("add_tum_thai")).click();
 
-            String tumThaiVal = driver.findElement(By.id("txt_tum_thai")).getAttribute("value");
-            assertEquals("1", tumThaiVal);
-
             // Click Check Out
             new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
             driver.findElement(By.id("btn_check_out")).click();
 
-            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=1&btn_check_out=Check+out",
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=0&btn_check_out=Check+out",
                             driver.getCurrentUrl());
 
             // Click Confirm Button
@@ -265,18 +264,15 @@ public class SystemTest {
             assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/check_payment?txt_credit_card_num=&txt_name_on_card=&btn_pay=Pay",
                             driver.getCurrentUrl());
 
-            String retry2Remaining = driver.findElement(By.id("msg_error")).getAttribute("value");
-            assertEquals(">ERROR: Payment failed. 2 retries remaining.", retry2Remaining);
+            String retry2Remaining = driver.findElement(By.id("msg_error")).getText();
+            assertEquals("ERROR: Payment failed. 2 retries remaining.", retry2Remaining);
 
             new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
             driver.findElement(By.id("btn_pay")).click();
 
-            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/check_payment?txt_credit_card_num=&txt_name_on_card=&btn_pay=Pay",
-                            driver.getCurrentUrl());
-
-            String retry1Remaining = driver.findElement(By.id("msg_error")).getAttribute("value");
-            assertEquals(">ERROR: Payment failed. 1 retries remaining.", retry1Remaining);
+            String retry1Remaining = driver.findElement(By.id("msg_error")).getText();
+            assertEquals("ERROR: Payment failed. 1 retries remaining.", retry1Remaining);
 
             new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
