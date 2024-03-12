@@ -309,7 +309,9 @@ public class SystemTest {
 
     @Test
     public void test15UserChangesOrderWhenOnSummaryPage() {
-            new WebDriverWait(driver, Duration.ofSeconds(5))
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("start")));
             driver.findElement(By.id("start")).click();
 
@@ -325,7 +327,7 @@ public class SystemTest {
                             .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
             driver.findElement(By.id("btn_check_out")).click();
 
-            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=1&btn_check_out=Check+out",
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=0&btn_check_out=Check+out",
                             driver.getCurrentUrl());
 
             new WebDriverWait(driver, Duration.ofSeconds(5))
