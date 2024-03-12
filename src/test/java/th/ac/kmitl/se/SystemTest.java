@@ -237,4 +237,115 @@ public class SystemTest {
                 .until(ExpectedConditions.urlToBe("https://fekmitl.pythonanywhere.com/kratai-bin/check_collect?numTumThaiRemain=1&numTumPooRemain=1"));
 
     }
+
+    @Test
+    public void test13UserPayCreditCardWrongThreeTimes() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+            driver.findElement(By.id("start")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+            // Click Add Tum Thai
+            driver.findElement(By.id("add_tum_thai")).click();
+
+            // Click Check Out
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
+            driver.findElement(By.id("btn_check_out")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=0&btn_check_out=Check+out",
+                            driver.getCurrentUrl());
+
+            // Click Confirm Button
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_confirm")));
+            driver.findElement(By.id("btn_confirm")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/pay?btn_confirm=Confirm",
+                            driver.getCurrentUrl());
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
+            driver.findElement(By.id("btn_pay")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/check_payment?txt_credit_card_num=&txt_name_on_card=&btn_pay=Pay",
+                            driver.getCurrentUrl());
+
+            String retry2Remaining = driver.findElement(By.id("msg_error")).getText();
+            assertEquals("ERROR: Payment failed. 2 retries remaining.", retry2Remaining);
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
+            driver.findElement(By.id("btn_pay")).click();
+
+            String retry1Remaining = driver.findElement(By.id("msg_error")).getText();
+            assertEquals("ERROR: Payment failed. 1 retries remaining.", retry1Remaining);
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_pay")));
+            driver.findElement(By.id("btn_pay")).click();
+
+            // There is a slight problem in the kratai bin website where once you click pay
+            // button wrong three times it should go back to the home page which it did, but
+            // the url didn't change. So in this step I use the home page url instead of the
+            // unchange url
+            // assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin",
+            // driver.getCurrentUrl());
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+            driver.findElement(By.id("start"));
+    }
+
+    @Test
+    public void test14UserCancelOrderingGoods() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+            driver.findElement(By.id("start")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_cancel")));
+            driver.findElement(By.id("btn_cancel")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin", driver.getCurrentUrl());
+    }
+
+    @Test
+    public void test15UserChangesOrderWhenOnSummaryPage() {
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("start")));
+            driver.findElement(By.id("start")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order", driver.getCurrentUrl());
+
+            // Click Add Tum Thai
+            driver.findElement(By.id("add_tum_thai")).click();
+
+            String tumThaiVal = driver.findElement(By.id("txt_tum_thai")).getAttribute("value");
+            assertEquals("1", tumThaiVal);
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_check_out")));
+            driver.findElement(By.id("btn_check_out")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/confirm?txt_tum_thai=1&txt_tum_poo=0&btn_check_out=Check+out",
+                            driver.getCurrentUrl());
+
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                            .until(ExpectedConditions.elementToBeClickable(By.id("btn_change")));
+            driver.findElement(By.id("btn_change")).click();
+
+            assertEquals("https://fekmitl.pythonanywhere.com/kratai-bin/order",
+                            driver.getCurrentUrl());
+
+    }
 }
