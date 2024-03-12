@@ -292,7 +292,9 @@ public class SystemTest {
 
     @Test
     public void test14UserCancelOrderingGoods() {
-            new WebDriverWait(driver, Duration.ofSeconds(5))
+        driver.get("https://fekmitl.pythonanywhere.com/kratai-bin");
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
                             .until(ExpectedConditions.elementToBeClickable(By.id("start")));
             driver.findElement(By.id("start")).click();
 
